@@ -1,1 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐝 Othniel Spelling Bee • Grades 1–3</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI','Comic Sans MS','Chalkboard SE',cursive,sans-serif; }
+    body { background:linear-gradient(145deg,#f9e5b7 0%,#f7d9a0 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1.5rem; }
+    .app-container { max-width:1100px; width:100%; background:#fff9ed; border-radius:80px 80px 60px 60px; box-shadow:0 20px 30px rgba(0,0,0,.15),0 8px 12px rgba(0,0,0,.1),inset 0 2px 4px rgba(255,255,255,.8); padding:2.5rem 2rem 2rem; border:6px solid #f3c35b; position:relative; }
+    .app-container::before { content:""; position:absolute; top:-6px; left:10%; width:80%; height:18px; background:repeating-linear-gradient(90deg,#f3c35b 0px,#f3c35b 20px,#2c2c2c 20px,#2c2c2c 40px); border-radius:40px 40px 0 0; opacity:.25; pointer-events:none; }
+    .header { display:flex; align-items:center; justify-content:center; gap:.75rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+    .header h1 { font-size:2.8rem; font-weight:700; color:#3b2b1f; text-shadow:4px 4px 0 #ffd966,6px 6px 0 rgba(0,0,0,.1); letter-spacing:1px; display:flex; align-items:center; gap:12px; }
+    .header h1 span { font-size:3rem; line-height:1; }
+    .header .app-name { color:#b8860b; font-style:italic; }
 
+    .tabs { display:flex; justify-content:center; gap:0; margin-bottom:1.5rem; }
+    .tab-btn { background:#e9d6b0; border:4px solid #c9a86c; border-bottom:none; color:#3b2b1f; font-size:1.3rem; font-weight:700; padding:.7rem 2rem; cursor:pointer; transition:all .15s ease; letter-spacing:1px; }
+    .tab-btn:first-child { border-radius:40px 0 0 0; border-right:2px solid #c9a86c; }
+    .tab-btn:last-child  { border-radius:0 40px 0 0; border-left:2px solid #c9a86c; }
+    .tab-btn.active { background:#f7c948; border-color:#b8860b; transform:translateY(2px); }
+    .tab-btn:hover:not(.active) { background:#f3e1b8; }
+
+    .grade-badge { display:flex; justify-content:center; gap:10px; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .grade-btn { background:#e9d6b0; border:4px solid #c9a86c; color:#3b2b1f; font-size:1.3rem; font-weight:700; padding:.5rem 1.6rem; border-radius:50px; cursor:pointer; transition:all .1s ease; box-shadow:0 5px 0 #a5834a; letter-spacing:1px; }
+    .grade-btn.active { background:#f7c948; border-color:#b8860b; box-shadow:0 5px 0 #8b6508; transform:translateY(1px); }
+    .grade-btn:active { transform:translateY(4px); box-shadow:0 1px 0 #a5834a; }
+
+    .card-area { background:#fef9e8; border-radius:70px; padding:2rem 2rem 1.5rem; box-shadow:inset 0 0 0 6px #f3d48b,inset 0 0 0 12px #fef3cf,0 12px 18px rgba(0,0,0,.1); margin-bottom:1.2rem; border:2px solid #c9a86c; }
+
+    .word-display { text-align:center; margin-bottom:2.2rem; }
+    .word { font-size:6rem; font-weight:800; color:#1e2b2e; text-transform:uppercase; letter-spacing:8px; word-break:break-word; line-height:1.2; text-shadow:5px 5px 0 #f3c35b,8px 8px 0 rgba(0,0,0,.08); margin-bottom:.5rem; }
+    .hint { font-size:1.6rem; color:#6b4f2c; background:#ffecb3; display:inline-block; padding:.6rem 2rem; border-radius:60px; box-shadow:inset 0 0 0 2px #dbb86a,0 6px 0 #c9a86c; font-weight:500; letter-spacing:1px; margin-top:.5rem; }
+
+    .spell-area { text-align:center; }
+    .spell-instruction { font-size:1.4rem; color:#6b4f2c; margin-bottom:1.2rem; font-weight:600; }
+    .speaker-big { font-size:6rem; cursor:pointer; display:inline-block; margin:.5rem 0 1rem; transition:transform .1s; user-select:none; }
+    .speaker-big:hover { transform:scale(1.1); }
+    .speaker-big:active { transform:scale(.95); }
+    .speaker-big.speaking { animation:pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.15);} }
+
+    .dash-row { display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:1.5rem 0; }
+    .dash-input {
+      width:60px; height:80px; font-size:2.5rem; font-weight:800; text-align:center;
+      text-transform:uppercase; color:#1e2b2e; background:#fff;
+      border:3px dashed #c9a86c; border-radius:14px; outline:none;
+      transition:all .2s; box-shadow:inset 0 3px 6px rgba(0,0,0,.08);
+    }
+    .dash-input:focus { border-color:#f7c948; border-style:solid; background:#fffbe8; box-shadow:0 0 0 4px rgba(247,201,72,.3); }
+    .dash-input.filled { border-style:solid; border-color:#b8860b; background:#fff9e0; }
+    .dash-input.correct { border-color:#4f8a2b; background:#e6f5d0; color:#2a5a10; }
+    .dash-input.wrong   { border-color:#b35e3e; background:#fbdcd0; color:#8b2a10; animation:shake .3s; }
+    @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+
+    .spell-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:.8rem; margin-top:1rem; }
+
+    .feedback {
+      font-size:1.8rem; font-weight:800; margin-top:1.5rem; min-height:2.5rem;
+      transition:all .2s; letter-spacing:1px;
+    }
+    .feedback.correct { color:#4f8a2b; text-shadow:0 3px 0 #d0e8b0; }
+    .feedback.wrong { color:#b35e3e; text-shadow:0 3px 0 #f0c0b0; }
+    .feedback.idle { color:#8a6a3a; }
+
+    .spell-hint-box {
+      display:inline-block; background:#ffecb3; padding:.8rem 1.8rem; border-radius:40px;
+      font-size:1.2rem; color:#6b4f2c; box-shadow:inset 0 0 0 2px #dbb86a,0 4px 0 #c9a86c;
+      margin-top:.8rem; max-width:90%; line-height:1.5;
+    }
+    .spell-hint-box.revealed { background:#ffe9a8; box-shadow:inset 0 0 0 2px #b8860b,0 4px 0 #a5834a; }
+
+    .actions { display:flex; justify-content:center; flex-wrap:wrap; gap:1rem; margin:2rem 0 1rem; }
+    .btn { border:none; background:#ffe484; border-radius:80px; padding:1rem 1.8rem; font-size:1.4rem; font-weight:700; color:#2c1e0e; display:inline-flex; align-items:center; justify-content:center; gap:10px; cursor:pointer; box-shadow:0 8px 0 #b8860b,0 10px 20px rgba(0,0,0,.15); transition:all .07s ease; border:2px solid #e3b34c; letter-spacing:.5px; min-width:160px; }
+    .btn:active { transform:translateY(6px); box-shadow:0 2px 0 #b8860b,0 5px 12px rgba(0,0,0,.1); }
+    .btn.speak { background:#a8d8ea; border-color:#4f7e9c; box-shadow:0 8px 0 #3a5f7a; color:#0f2a38; }
+    .btn.prev { background:#ffc98a; border-color:#a86a1f; box-shadow:0 8px 0 #7a4a10; color:#3a2205; }
+    .btn.next { background:#b0e57c; border-color:#4f8a2b; box-shadow:0 8px 0 #3f6d20; color:#1b3b0a; }
+    .btn.shuffle { background:#dbb0f9; border-color:#7e3e9c; box-shadow:0 8px 0 #5a2b7a; color:#2a0f3a; }
+    .btn.reset { background:#f9c1b1; border-color:#b35e3e; box-shadow:0 8px 0 #8f462b; color:#3e1c0f; }
+    .btn.check { background:#f7c948; border-color:#b8860b; box-shadow:0 8px 0 #8b6508; color:#3b2b1f; min-width:180px; }
+    .btn.hint  { background:#ffecb3; border-color:#dbb86a; box-shadow:0 8px 0 #b3925c; color:#6b4f2c; }
+    .btn:disabled { opacity:.5; transform:translateY(4px); box-shadow:0 4px 0 #7a5c2e; pointer-events:none; filter:grayscale(.2); }
+
+    .progress-area { display:flex; justify-content:space-between; align-items:center; background:#e7d5b4; border-radius:60px; padding:.9rem 1.8rem; margin-top:1.5rem; border:3px solid #c9a86c; flex-wrap:wrap; gap:12px; }
+    .progress-text { font-size:1.5rem; font-weight:600; color:#3b2b1f; display:flex; align-items:center; gap:10px; }
+    .progress-bar-bg { flex:1; min-width:180px; height:26px; background:#cfb991; border-radius:40px; box-shadow:inset 0 3px 6px rgba(0,0,0,.2); overflow:hidden; border:2px solid #aa8b58; }
+    .progress-fill { width:0%; height:100%; background:linear-gradient(90deg,#f7c948,#f3b33d); border-radius:40px; transition:width .3s ease; }
+    .stars { display:flex; gap:8px; font-size:2rem; line-height:1; }
+    .star { color:#d4b48c; transition:all .2s; }
+    .star.filled { color:#f7c948; text-shadow:0 0 8px #f7c948,0 2px 4px rgba(0,0,0,.2); }
+
+    .word-list-toggle { text-align:right; margin-top:.8rem; font-size:1.1rem; color:#7a5c3a; cursor:pointer; text-decoration:underline dotted; font-weight:600; display:inline-block; }
+    .word-bank { margin-top:1rem; background:#f3e8d2; border-radius:40px; padding:1rem 1.5rem; font-size:1.1rem; color:#2c1e0e; display:flex; flex-wrap:wrap; gap:8px 14px; border:2px dashed #b3925c; max-height:160px; overflow-y:auto; }
+    .word-bank span { background:#fff1c1; padding:.25rem .8rem; border-radius:30px; font-weight:500; box-shadow:0 2px 0 #c9a86c; }
+    .hidden { display:none !important; }
+    .count-badge { font-size:.95rem; background:#c9a86c; color:#fff; padding:.2rem .7rem; border-radius:20px; margin-left:8px; vertical-align:middle; }
+    .footer-note { text-align:center; margin-top:1rem; font-size:.95rem; color:#8a6a3a; font-style:italic; }
+
+    @media (max-width:700px) {
+      .app-container { padding:1.8rem 1rem; border-radius:50px; }
+      .word { font-size:3.8rem; letter-spacing:4px; }
+      .header h1 { font-size:1.8rem; }
+      .btn { font-size:1.05rem; padding:.7rem 1rem; min-width:110px; }
+      .hint { font-size:1.3rem; }
+      .progress-text { font-size:1.2rem; }
+      .tab-btn { font-size:1.1rem; padding:.5rem 1.3rem; }
+      .speaker-big { font-size:4.5rem; }
+      .dash-input { width:48px; height:68px; font-size:2rem; }
+      .feedback { font-size:1.5rem; }
+    }
+    @media (max-width:480px) {
+      .word { font-size:2.6rem; }
+      .grade-btn { font-size:.95rem; padding:.4rem .9rem; }
+      .btn { font-size:.85rem; min-width:90px; gap:4px; padding:.5rem .7rem; }
+      .tab-btn { font-size:1rem; padding:.4rem 1rem; }
+      .speaker-big { font-size:3.5rem; }
+      .dash-input { width:38px; height:56px; font-size:1.6rem; border-radius:10px; }
+      .dash-row { gap:6px; }
+      .feedback { font-size:1.2rem; }
+      .spell-instruction { font-size:1.1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <h1><span>🐝</span> <span class="app-name">Othniel</span> Spelling Bee <span>🐝</span></h1>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tabStudy" data-tab="study">📖 Study</button>
+    <button class="tab-btn" id="tabSpell" data-tab="spell">✍️ Spell</button>
+  </div>
+
+  <div class="grade-badge">
+    <button class="grade-btn active" data-grade="1">Grade 1 <span class="count-badge" id="count1">0</span></button>
+    <button class="grade-btn" data-grade="2">Grade 2 <span class="count-badge" id="count2">0</span></button>
+    <button class="grade-btn" data-grade="3">Grade 3 <span class="count-badge" id="count3">0</span></button>
+  </div>
+
+  <!-- STUDY TAB -->
+  <div id="studyPanel">
+    <div class="card-area">
+      <div class="word-display">
+        <div class="word" id="wordDisplay">PAT</div>
+        <div class="hint" id="hintDisplay">tap lightly</div>
+      </div>
+      <div class="actions">
+        <button class="btn speak" id="speakBtn">🔊 Speak</button>
+        <button class="btn prev" id="prevBtn">⬅️ Previous</button>
+        <button class="btn next" id="nextBtn">➡️ Next</button>
+        <button class="btn shuffle" id="shuffleBtn">🔀 Shuffle</button>
+        <button class="btn reset" id="resetBtn">🔄 Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPELL TAB -->
+  <div id="spellPanel" class="hidden">
+    <div class="card-area">
+      <div class="spell-area">
+        <div class="spell-instruction">🔊 Listen carefully, then spell the word:</div>
+        <div class="speaker-big" id="speakerBig" title="Click to hear the word again">🔊</div>
+        <div class="dash-row" id="dashRow"></div>
+        <div class="spell-hint-box" id="spellHintBox">💡 Click "Hint" to hear the word again and get a clue</div>
+        <div class="feedback idle" id="feedback">&nbsp;</div>
+        <div class="spell-actions">
+          <button class="btn speak" id="spellSpeakBtn">🔊 Hear Again</button>
+          <button class="btn hint"  id="spellHintBtn">💡 Hint</button>
+          <button class="btn check" id="spellCheckBtn">✅ Check</button>
+          <button class="btn prev"  id="spellPrevBtn">⬅️ Previous</button>
+          <button class="btn next"  id="spellNextBtn">➡️ Next Word</button>
+          <button class="btn reset" id="spellResetBtn">🔄 Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-area">
+    <div class="progress-text"><span>📚</span> <span id="progressLabel">1 / 145</span></div>
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:1%"></div></div>
+    <div class="stars" id="starsContainer"></div>
+  </div>
+
+  <div style="text-align:right; margin-top:.4rem;">
+    <span class="word-list-toggle" id="toggleWordList">📋 show word bank</span>
+  </div>
+  <div class="word-bank hidden" id="wordBank"></div>
+
+  <div class="footer-note">🐝 Othniel Spelling Bee • Study hard, spell well!</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     ICBAI-SL SPELLING BEE WORD LISTS
+     ========================================================= */
+  const WORDS = {
+    1: [
+      { word:"PAT", hint:"tap lightly with your hand" },
+      { word:"BID", hint:"offer a price" },
+      { word:"LEG", hint:"🦵 you stand on it" },
+      { word:"CAP", hint:"🧢 a soft hat" },
+      { word:"HID", hint:"went out of sight" },
+      { word:"TEN", hint:"🔟 number after nine" },
+      { word:"RAN", hint:"moved fast on foot" },
+      { word:"JOB", hint:"💼 work you do" },
+      { word:"HOP", hint:"🐰 jump on one foot" },
+      { word:"MAT", hint:"a small rug" },
+      { word:"FUN", hint:"🎉 enjoy yourself" },
+      { word:"BAT", hint:"🦇 flies at night / stick for baseball" },
+      { word:"DEN", hint:"a cozy room or animal home" },
+      { word:"WIG", hint:"fake hair you wear" },
+      { word:"VAN", hint:"🚐 a big boxy vehicle" },
+      { word:"CUP", hint:"🥤 you drink from it" },
+      { word:"CUB", hint:"🐻 baby bear" },
+      { word:"MOM", hint:"👩 your mother" },
+      { word:"YAM", hint:"🍠 a sweet potato" },
+      { word:"BUS", hint:"🚌 carries many riders" },
+      { word:"FOX", hint:"🦊 clever red animal" },
+      { word:"HIS", hint:"belongs to him" },
+      { word:"LET", hint:"allow something" },
+      { word:"PUP", hint:"🐶 baby dog" },
+      { word:"CAN", hint:"🥫 a metal container" },
+      { word:"WET", hint:"💧 covered in water" },
+      { word:"BIT", hint:"a tiny piece" },
+      { word:"BOX", hint:"📦 a square container" },
+      { word:"DAD", hint:"👨 your father" },
+      { word:"DID", hint:"past of 'do'" },
+      { word:"BAKE", hint:"🍪 cook in an oven" },
+      { word:"CHOP", hint:"cut into pieces" },
+      { word:"EAST", hint:"🌅 where the sun rises" },
+      { word:"DIME", hint:"🪙 a ten-cent coin" },
+      { word:"HELP", hint:"🤝 give a hand" },
+      { word:"LUCK", hint:"🍀 good fortune" },
+      { word:"CLAW", hint:"🐾 sharp animal nail" },
+      { word:"BELT", hint:"worn around your waist" },
+      { word:"GAVE", hint:"handed over" },
+      { word:"FAST", hint:"💨 moving quickly" },
+      { word:"ONCE", hint:"one time only" },
+      { word:"MOON", hint:"🌙 shines at night" },
+      { word:"SHOW", hint:"let someone see" },
+      { word:"NECK", hint:"between head and shoulders" },
+      { word:"LOVE", hint:"❤️ deep affection" },
+      { word:"MILK", hint:"🥛 white drink from cows" },
+      { word:"SAME", hint:"not different" },
+      { word:"SICK", hint:"🤒 not feeling well" },
+      { word:"KING", hint:"👑 a royal ruler" },
+      { word:"PART", hint:"a piece of something" },
+      { word:"ROOM", hint:"a space inside a house" },
+      { word:"TANK", hint:"holds water or fuel" },
+      { word:"SNOW", hint:"❄️ frozen white flakes" },
+      { word:"SEED", hint:"🌱 grows into a plant" },
+      { word:"SIDE", hint:"left or right edge" },
+      { word:"MICE", hint:"🐭 plural of mouse" },
+      { word:"ZONE", hint:"a special area" },
+      { word:"COOK", hint:"👨‍🍳 make food" },
+      { word:"MULE", hint:"a donkey-horse mix" },
+      { word:"WERE", hint:"past of 'are'" },
+      { word:"GOLF", hint:"⛳ sport with clubs and a ball" },
+      { word:"STAR", hint:"⭐ shines at night" },
+      { word:"NOON", hint:"🕛 middle of the day" },
+      { word:"SLOW", hint:"🐢 not fast" },
+      { word:"HOPE", hint:"wish for something good" },
+      { word:"ACROSS", hint:"from one side to the other" },
+      { word:"BROTHER", hint:"👦 a boy sibling" },
+      { word:"CENTER", hint:"the middle" },
+      { word:"BEFORE", hint:"earlier in time" },
+      { word:"COOKIE", hint:"🍪 a sweet baked treat" },
+      { word:"AROUND", hint:"on all sides" },
+      { word:"BUTTER", hint:"🧈 spread for bread" },
+      { word:"MYSELF", hint:"my own self" },
+      { word:"EVERY", hint:"each one" },
+      { word:"HAPPY", hint:"😊 feeling joy" },
+      { word:"KITTEN", hint:"🐱 baby cat" },
+      { word:"FATHER", hint:"👨 your dad" },
+      { word:"EMPLOY", hint:"give someone a job" },
+      { word:"PLANET", hint:"🌍 a world in space" },
+      { word:"SILENT", hint:"🤫 making no sound" },
+      { word:"PARENT", hint:"👪 mother or father" },
+      { word:"CHILI", hint:"🌶️ a spicy pepper" },
+      { word:"MAYBE", hint:"perhaps" },
+      { word:"EARLY", hint:"before the usual time" },
+      { word:"ZEBRA", hint:"🦓 striped animal" },
+      { word:"UNDER", hint:"below something" },
+      { word:"PERSON", hint:"a human being" },
+      { word:"ROBIN", hint:"🐦 a red-breasted bird" },
+      { word:"SISTER", hint:"👧 a girl sibling" },
+      { word:"CRAZY", hint:"wild and silly" },
+      { word:"WATER", hint:"💧 clear liquid you drink" },
+      { word:"FLAVOR", hint:"taste of food" },
+      { word:"ALWAYS", hint:"every time" },
+      { word:"PLEASE", hint:"🙏 polite word when asking" },
+      { word:"ALARM", hint:"⏰ wakes you up" },
+      { word:"LAUGH", hint:"😂 sound of joy" },
+      { word:"RABBIT", hint:"🐰 hopping animal" },
+      { word:"MINUS", hint:"➖ subtraction sign" },
+      { word:"DOZEN", hint:"twelve of something" },
+      { word:"MITTEN", hint:"🧤 winter hand cover" },
+      { word:"BETTER", hint:"more good" },
+      { word:"AIRPLANE", hint:"✈️ flies in the sky" },
+      { word:"BASEBALL", hint:"⚾ bat-and-ball sport" },
+      { word:"CHIMNEY", hint:"smoke goes up it" },
+      { word:"BECOME", hint:"grow to be" },
+      { word:"BIRTHDAY", hint:"🎂 day you were born" },
+      { word:"BELIEVE", hint:"think something is true" },
+      { word:"PANCAKE", hint:"🥞 flat breakfast cake" },
+      { word:"BALLOON", hint:"🎈 inflates with air" },
+      { word:"AUTHOR", hint:"✍️ writes books" },
+      { word:"MAILBOX", hint:"📬 where mail is delivered" },
+      { word:"DAYTIME", hint:"when the sun is up" },
+      { word:"NOONTIME", hint:"around 12 o'clock" },
+      { word:"BEDROOM", hint:"🛏️ room for sleeping" },
+      { word:"OATMEAL", hint:"🥣 warm breakfast cereal" },
+      { word:"COBWEB", hint:"🕸️ spider's net" },
+      { word:"CLOTHING", hint:"👕 things you wear" },
+      { word:"SUMMER", hint:"☀️ hottest season" },
+      { word:"AIRPORT", hint:"✈️ where planes land" },
+      { word:"NUMBER", hint:"🔢 a counting word" },
+      { word:"ELSEWHERE", hint:"in another place" },
+      { word:"BECAUSE", hint:"for the reason that" },
+      { word:"OUTSIDE", hint:"not indoors" },
+      { word:"POPCORN", hint:"🍿 puffed corn snack" },
+      { word:"OCEAN", hint:"🌊 a huge body of water" },
+      { word:"YOURSELF", hint:"your own self" },
+      { word:"BORROW", hint:"take and return later" },
+      { word:"FRACTION", hint:"part of a whole number" },
+      { word:"GARBAGE", hint:"🗑️ trash" },
+      { word:"STATUE", hint:"a carved figure" },
+      { word:"JOURNAL", hint:"📔 a daily diary" },
+      { word:"DESTROY", hint:"break completely" },
+      { word:"KITCHEN", hint:"🍳 room for cooking" },
+      { word:"AGAINST", hint:"opposed to" },
+      { word:"GIRAFFE", hint:"🦒 tall spotted animal" },
+      { word:"ANSWER", hint:"a reply to a question" },
+      { word:"INTEREST", hint:"curiosity about something" },
+      { word:"ADAMANT", hint:"refusing to change your mind" },
+      { word:"NECESSARY", hint:"needed" },
+      { word:"BOUNDARY", hint:"a dividing line" }
+    ],
+    2: [
+      { word:"DISGUISE", hint:"change how you look" },
+      { word:"DOMINANT", hint:"the strongest one" },
+      { word:"PLANTATION", hint:"a big farm" },
+      { word:"PREFERENCE", hint:"what you like best" },
+      { word:"MEMORABLE", hint:"easy to remember" },
+      { word:"TREACHERY", hint:"betrayal of trust" },
+      { word:"DISAPPEAR", hint:"👻 vanish from sight" },
+      { word:"RECITATION", hint:"saying something aloud from memory" },
+      { word:"MEDALLION", hint:"🏅 a large medal" },
+      { word:"WILDERNESS", hint:"🌲 wild natural land" },
+      { word:"BASKETBALL", hint:"🏀 hoops sport" },
+      { word:"FOUNDATION", hint:"the base of a building" },
+      { word:"SIMPLICITY", hint:"the state of being simple" },
+      { word:"INTERESTING", hint:"holding your attention" },
+      { word:"REINFORCE", hint:"make stronger" },
+      { word:"PREJUDICE", hint:"unfair opinion formed without reason" },
+      { word:"MANAGEABLE", hint:"able to be handled" },
+      { word:"PRODUCTION", hint:"the act of making something" },
+      { word:"ENVIRONMENT", hint:"🌍 the natural world around us" },
+      { word:"EARTHQUAKE", hint:"shaking of the ground" },
+      { word:"APPLESAUCE", hint:"🍎 mashed apple food" },
+      { word:"DISHONEST", hint:"not truthful" },
+      { word:"COMPREHEND", hint:"understand fully" },
+      { word:"ACCESS", hint:"a way in" },
+      { word:"ACROSS", hint:"from one side to the other" },
+      { word:"BROTHER", hint:"👦 a boy sibling" },
+      { word:"CENTER", hint:"the middle" },
+      { word:"BEFORE", hint:"earlier in time" },
+      { word:"COOKIE", hint:"🍪 a sweet baked treat" },
+      { word:"AROUND", hint:"on all sides" },
+      { word:"BUTTER", hint:"🧈 spread for bread" },
+      { word:"MYSELF", hint:"my own self" },
+      { word:"EVERY", hint:"each one" },
+      { word:"HAPPY", hint:"😊 feeling joy" },
+      { word:"KITTEN", hint:"🐱 baby cat" },
+      { word:"FATHER", hint:"👨 your dad" },
+      { word:"EMPLOY", hint:"give someone a job" },
+      { word:"PLANET", hint:"🌍 a world in space" },
+      { word:"SILENT", hint:"🤫 making no sound" },
+      { word:"PARENT", hint:"👪 mother or father" },
+      { word:"CHILI", hint:"🌶️ a spicy pepper" },
+      { word:"MAYBE", hint:"perhaps" },
+      { word:"EARLY", hint:"before the usual time" },
+      { word:"ZEBRA", hint:"🦓 striped animal" },
+      { word:"UNDER", hint:"below something" },
+      { word:"PERSON", hint:"a human being" },
+      { word:"ROBIN", hint:"🐦 a red-breasted bird" },
+      { word:"SISTER", hint:"👧 a girl sibling" },
+      { word:"CRAZY", hint:"wild and silly" },
+      { word:"WATER", hint:"💧 clear liquid you drink" },
+      { word:"FLAVOR", hint:"taste of food" },
+      { word:"ALWAYS", hint:"every time" },
+      { word:"PLEASE", hint:"🙏 polite word when asking" },
+      { word:"ALARM", hint:"⏰ wakes you up" },
+      { word:"LAUGH", hint:"😂 sound of joy" },
+      { word:"RABBIT", hint:"🐰 hopping animal" },
+      { word:"MINUS", hint:"➖ subtraction sign" },
+      { word:"DOZEN", hint:"twelve of something" },
+      { word:"MITTEN", hint:"🧤 winter hand cover" },
+      { word:"BETTER", hint:"more good" },
+      { word:"AIRPLANE", hint:"✈️ flies in the sky" },
+      { word:"BASEBALL", hint:"⚾ bat-and-ball sport" },
+      { word:"CHIMNEY", hint:"smoke goes up it" },
+      { word:"BECOME", hint:"grow to be" },
+      { word:"BIRTHDAY", hint:"🎂 day you were born" },
+      { word:"BELIEVE", hint:"think something is true" },
+      { word:"PANCAKE", hint:"🥞 flat breakfast cake" },
+      { word:"BALLOON", hint:"🎈 inflates with air" },
+      { word:"AUTHOR", hint:"✍️ writes books" },
+      { word:"MAILBOX", hint:"📬 where mail is delivered" },
+      { word:"DAYTIME", hint:"when the sun is up" },
+      { word:"NOONTIME", hint:"around 12 o'clock" },
+      { word:"BEDROOM", hint:"🛏️ room for sleeping" },
+      { word:"OATMEAL", hint:"🥣 warm breakfast cereal" },
+      { word:"COBWEB", hint:"🕸️ spider's net" },
+      { word:"CLOTHING", hint:"👕 things you wear" },
+      { word:"SUMMER", hint:"☀️ hottest season" },
+      { word:"AIRPORT", hint:"✈️ where planes land" },
+      { word:"NUMBER", hint:"🔢 a counting word" },
+      { word:"ELSEWHERE", hint:"in another place" },
+      { word:"BECAUSE", hint:"for the reason that" },
+      { word:"OUTSIDE", hint:"not indoors" },
+      { word:"POPCORN", hint:"🍿 puffed corn snack" },
+      { word:"OCEAN", hint:"🌊 a huge body of water" },
+      { word:"YOURSELF", hint:"your own self" },
+      { word:"BORROW", hint:"take and return later" },
+      { word:"FRACTION", hint:"part of a whole number" },
+      { word:"GARBAGE", hint:"🗑️ trash" },
+      { word:"STATUE", hint:"a carved figure" },
+      { word:"JOURNAL", hint:"📔 a daily diary" },
+      { word:"DESTROY", hint:"break completely" },
+      { word:"KITCHEN", hint:"🍳 room for cooking" },
+      { word:"AGAINST", hint:"opposed to" },
+      { word:"GIRAFFE", hint:"🦒 tall spotted animal" },
+      { word:"ANSWER", hint:"a reply to a question" },
+      { word:"INTEREST", hint:"curiosity about something" },
+      { word:"ADAMANT", hint:"refusing to change your mind" },
+      { word:"NECESSARY", hint:"needed" },
+      { word:"BOUNDARY", hint:"a dividing line" }
+    ],
+    3: [
+      { word:"ENCOURAGE", hint:"give support and hope" },
+      { word:"GUARDIAN", hint:"🛡️ a protector or caretaker" },
+      { word:"IMBALANCE", hint:"lack of balance" },
+      { word:"PASSENGER", hint:"🚗 a rider in a vehicle" },
+      { word:"DISGUISE", hint:"change how you look" },
+      { word:"DOMINANT", hint:"the strongest one" },
+      { word:"PLANTATION", hint:"a big farm" },
+      { word:"PREFERENCE", hint:"what you like best" },
+      { word:"MEMORABLE", hint:"easy to remember" },
+      { word:"TREACHERY", hint:"betrayal of trust" },
+      { word:"DISAPPEAR", hint:"👻 vanish from sight" },
+      { word:"RECITATION", hint:"saying something aloud from memory" },
+      { word:"MEDALLION", hint:"🏅 a large medal" },
+      { word:"WILDERNESS", hint:"🌲 wild natural land" },
+      { word:"BASKETBALL", hint:"🏀 hoops sport" },
+      { word:"FOUNDATION", hint:"the base of a building" },
+      { word:"SIMPLICITY", hint:"the state of being simple" },
+      { word:"INTERESTING", hint:"holding your attention" },
+      { word:"REINFORCE", hint:"make stronger" },
+      { word:"PREJUDICE", hint:"unfair opinion formed without reason" },
+      { word:"MANAGEABLE", hint:"able to be handled" },
+      { word:"PRODUCTION", hint:"the act of making something" },
+      { word:"ENVIRONMENT", hint:"🌍 the natural world around us" },
+      { word:"EARTHQUAKE", hint:"shaking of the ground" },
+      { word:"APPLESAUCE", hint:"🍎 mashed apple food" },
+      { word:"DISHONEST", hint:"not truthful" },
+      { word:"COMPREHEND", hint:"understand fully" },
+      { word:"ACCESS", hint:"a way in" },
+      { word:"ARITHMETIC", hint:"➕➖ basic math" },
+      { word:"JELLYFISH", hint:"🪼 see-through sea creature" },
+      { word:"ARGUMENT", hint:"a disagreement" },
+      { word:"AVENUE", hint:"a wide street" },
+      { word:"COMPUTER", hint:"💻 machine for work and games" },
+      { word:"CONTINUE", hint:"keep going" },
+      { word:"CREATION", hint:"something newly made" },
+      { word:"HOLIDAY", hint:"🎉 a special day off" },
+      { word:"VOLLEYBALL", hint:"🏐 net sport with a ball" },
+      { word:"ALREADY", hint:"before now" },
+      { word:"NOBODY", hint:"no person" },
+      { word:"GOVERNOR", hint:"leader of a state" },
+      { word:"FURNITURE", hint:"🪑 tables, chairs, and beds" },
+      { word:"TOGETHER", hint:"with each other" },
+      { word:"WHATEVER", hint:"anything at all" },
+      { word:"ACTIVITY", hint:"something you do" },
+      { word:"FUNERAL", hint:"a ceremony for the deceased" },
+      { word:"MIDNIGHT", hint:"🕛 12 o'clock at night" },
+      { word:"NEWSPAPER", hint:"📰 printed daily news" },
+      { word:"TOOTHPASTE", hint:"🪥 cleans your teeth" },
+      { word:"POSITION", hint:"a place or job" },
+      { word:"TOMORROW", hint:"the day after today" },
+      { word:"UNDERSTAND", hint:"know the meaning" },
+      { word:"VACATION", hint:"🏖️ time off from school" },
+      { word:"VEGETABLE", hint:"🥕 a plant you eat" },
+      { word:"TELEVISE", hint:"broadcast on TV" },
+      { word:"REMEMBER", hint:"keep in your mind" },
+      { word:"TERRIBLE", hint:"very bad" },
+      { word:"UNWILLING", hint:"not wanting to do something" },
+      { word:"VALIANT", hint:"brave and courageous" },
+      { word:"DECORATOR", hint:"someone who decorates" },
+      { word:"EDUCATION", hint:"📚 the act of learning" },
+      { word:"GLACIER", hint:"🧊 a huge slow-moving ice mass" },
+      { word:"QUICKSAND", hint:"sand that swallows things" },
+      { word:"PRECIOUS", hint:"💎 very valuable" },
+      { word:"COLOGNE", hint:"a light perfume" },
+      { word:"COMPETITION", hint:"🏆 a contest" },
+      { word:"ACOUSTICS", hint:"how sound behaves in a space" }
+    ]
+  };
+
+  for (const g of [1,2,3]) {
+    const seen = new Set();
+    WORDS[g] = WORDS[g].filter(item => {
+      const key = item.word.toUpperCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
+  /* ---------- State ---------- */
+  let currentGrade = 1;
+  let currentIndex = 0;
+  let wordsList = [];
+  let shuffled = false;
+  let currentTab = 'study';
+  let preferredVoice = null;
+  let isSpeaking = false;
+
+  /* ---------- DOM ---------- */
+  const tabStudy = document.getElementById('tabStudy');
+  const tabSpell = document.getElementById('tabSpell');
+  const studyPanel = document.getElementById('studyPanel');
+  const spellPanel = document.getElementById('spellPanel');
+
+  const wordDisplay = document.getElementById('wordDisplay');
+  const hintDisplay = document.getElementById('hintDisplay');
+  const speakBtn = document.getElementById('speakBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const speakerBig = document.getElementById('speakerBig');
+  const dashRow = document.getElementById('dashRow');
+  const spellHintBox = document.getElementById('spellHintBox');
+  const feedback = document.getElementById('feedback');
+  const spellSpeakBtn = document.getElementById('spellSpeakBtn');
+  const spellHintBtn = document.getElementById('spellHintBtn');
+  const spellCheckBtn = document.getElementById('spellCheckBtn');
+  const spellPrevBtn = document.getElementById('spellPrevBtn');
+  const spellNextBtn = document.getElementById('spellNextBtn');
+  const spellResetBtn = document.getElementById('spellResetBtn');
+
+  const progressLabel = document.getElementById('progressLabel');
+  const progressFill = document.getElementById('progressFill');
+  const starsContainer = document.getElementById('starsContainer');
+  const gradeBtns = document.querySelectorAll('.grade-btn');
+  const toggleWordList = document.getElementById('toggleWordList');
+  const wordBankDiv = document.getElementById('wordBank');
+  const countBadges = {
+    1: document.getElementById('count1'),
+    2: document.getElementById('count2'),
+    3: document.getElementById('count3')
+  };
+
+  /* ---------- Stars ---------- */
+  function buildStars() {
+    starsContainer.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.textContent = '★';
+      starsContainer.appendChild(s);
+    }
+  }
+
+  /* ---------- Load grade ---------- */
+  function loadGrade(grade) {
+    currentGrade = grade;
+    wordsList = WORDS[grade].slice();
+    currentIndex = 0;
+    shuffled = false;
+    gradeBtns.forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.grade, 10) === grade);
+    });
+    renderWord();
+    updateProgress();
+    buildWordBank();
+    stopSpeech();
+    resetSpellInputs();
+  }
+
+  function renderWord() {
+    if (!wordsList.length) return;
+    const item = wordsList[currentIndex];
+    if (!item) return;
+    wordDisplay.textContent = item.word;
+    hintDisplay.textContent = item.hint;
+    speakBtn.disabled = !('speechSynthesis' in window);
+  }
+
+  function updateProgress() {
+    const total = wordsList.length;
+    const currentPos = currentIndex + 1;
+    progressLabel.textContent = `${currentPos} / ${total}`;
+    progressFill.style.width = `${(currentPos / total) * 100}%`;
+    const starsToFill = Math.round((currentPos / total) * 10);
+    const starEls = starsContainer.children;
+    for (let i = 0; i < starEls.length; i++) {
+      starEls[i].classList.toggle('filled', i < starsToFill);
+    }
+  }
+
+  function buildWordBank() {
+    if (!wordBankDiv) return;
+    wordBankDiv.innerHTML = '';
+    wordsList.forEach(item => {
+      const span = document.createElement('span');
+      span.textContent = item.word;
+      wordBankDiv.appendChild(span);
+    });
+  }
+
+  function toggleWordBank() {
+    if (!wordBankDiv) return;
+    wordBankDiv.classList.toggle('hidden');
+    toggleWordList.textContent = wordBankDiv.classList.contains('hidden')
+      ? '📋 show word bank'
+      : '📋 hide word bank';
+  }
+
+  /* =========================================================
+     SPEECH — Clearer pronunciation with syllable-by-syllable
+     playback for longer words + high-quality American voice.
+     ========================================================= */
+  function stopSpeech() {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    isSpeaking = false;
+    speakerBig.classList.remove('speaking');
+  }
+
+  /* Pick best American English voice — strict priority. */
+  function pickAmericanVoice() {
+    if (!('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    // Known high-quality US English voice names (Chrome, Edge, Safari, Windows)
+    const topUS = [
+      'Google US English',
+      'Microsoft Aria Online (Natural) - English (United States)',
+      'Microsoft Jenny Online (Natural) - English (United States)',
+      'Microsoft Guy Online (Natural) - English (United States)',
+      'Microsoft Michelle Online (Natural) - English (United States)',
+      'Microsoft Zira - English (United States)',
+      'Microsoft David - English (United States)',
+      'Microsoft Mark - English (United States)',
+      'Samantha',
+      'Alex',
+      'Ava',
+      'Allison'
+    ];
+    for (const name of topUS) {
+      const v = voices.find(v => v.name === name);
+      if (v) return v;
+    }
+    // Any voice with lang exactly "en-US"
+    const exactUS = voices.find(v => v.lang === 'en-US' || v.lang === 'en_US');
+    if (exactUS) return exactUS;
+    // Any voice with lang starting "en-US"
+    const startsUS = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en-us'));
+    if (startsUS) return startsUS;
+    // Any English voice (fallback)
+    return voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en')) || null;
+  }
+
+  function loadVoices() {
+    preferredVoice = pickAmericanVoice();
+  }
+
+  /* Speak a single utterance. */
+  function speakOnce(text, rate, pitch, onEnd) {
+    return new Promise((resolve) => {
+      if (!('speechSynthesis' in window)) return resolve();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = rate;
+      u.pitch = pitch || 1.0;
+      u.volume = 1.0;
+      if (!preferredVoice) preferredVoice = pickAmericanVoice();
+      if (preferredVoice) u.voice = preferredVoice;
+      u.onend = () => { if (onEnd) onEnd(); resolve(); };
+      u.onerror = () => resolve();
+      window.speechSynthesis.speak(u);
+    });
+  }
+
+  /* Break a word into syllable-ish chunks so each part is heard
+     clearly. For short words (<= 4 letters) we say the whole word
+     twice with a pause. For longer words we chunk them. */
+  function syllabify(word) {
+    const w = word.toUpperCase();
+    // Short words: no need to chunk
+    if (w.length <= 4) return [w, w];
+    // Longer: split by vowel groups (rough but effective for clarity)
+    const chunks = [];
+    let cur = '';
+    const vowels = 'AEIOUY';
+    for (let i = 0; i < w.length; i++) {
+      cur += w[i];
+      const next = w[i + 1];
+      const isVowel = vowels.includes(w[i]);
+      const nextIsVowel = next ? vowels.includes(next) : false;
+      // Break after a vowel if the next letter is a consonant and not the last letter
+      if (isVowel && next && !nextIsVowel && cur.length >= 2 && i < w.length - 1) {
+        chunks.push(cur);
+        cur = '';
+      }
+    }
+    if (cur) chunks.push(cur);
+    // Cap chunks at 4 for performance
+    if (chunks.length > 4) {
+      // Merge middle chunks to keep total ≤ 4
+      const head = chunks.slice(0, 2);
+      const middle = chunks.slice(2, chunks.length - 1).join('');
+      const tail = chunks[chunks.length - 1];
+      return [...head, middle, tail, w];
+    }
+    return [...chunks, w];
+  }
+
+  /* Pronounce the word VERY clearly:
+     - Say each syllable slowly
+     - Pause between syllables
+     - Then say the whole word at the end
+     Used for the "Speak"/"Hear Again" actions. */
+  async function speakWordClearly() {
+    const item = wordsList[currentIndex];
+    if (!item) return;
+
+    stopSpeech();
+    isSpeaking = true;
+    speakerBig.classList.add('speaking');
+    spellSpeakBtn.disabled = true;
+
+    const word = item.word.toUpperCase();
+    const parts = syllabify(word);
+
+    // Small warm-up so the voice engine is ready
+    await speakOnce(' ', 0.5, 1.0);
+
+    for (let i = 0; i < parts.length; i++) {
+      await speakOnce(parts[i], 0.5, 1.0);
+      // Pause between syllables (skip pause after the final full-word rep)
+      if (i < parts.length - 1) {
+        await new Promise(r => setTimeout(r, 350));
+      }
+    }
+
+    isSpeaking = false;
+    speakerBig.classList.remove('speaking');
+    spellSpeakBtn.disabled = false;
+  }
+
+  /* Praise messages: slightly faster than the spelling word. */
+  function speakPraise(text) {
+    stopSpeech();
+    speakOnce(text, 0.75, 1.0);
+  }
+
+  /* Used by Study tab's Speak button and Spell tab's Hear Again. */
+  function speakCurrentWord() {
+    speakWordClearly();
+  }
+
+  /* ---------- Navigation ---------- */
+  function nextWord() {
+    if (!wordsList.length) return;
+    currentIndex = (currentIndex + 1) % wordsList.length;
+    renderWord();
+    updateProgress();
+    resetSpellInputs();
+  }
+
+  function prevWord() {
+    if (!wordsList.length) return;
+    currentIndex = (currentIndex - 1 + wordsList.length) % wordsList.length;
+    renderWord();
+    updateProgress();
+    resetSpellInputs();
+  }
+
+  function shuffleWords() {
+    if (!wordsList.length) return;
+    for (let i = wordsList.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [wordsList[i], wordsList[j]] = [wordsList[j], wordsList[i]];
+    }
+    currentIndex = 0;
+    shuffled = true;
+    renderWord();
+    updateProgress();
+    buildWordBank();
+    stopSpeech();
+    resetSpellInputs();
+  }
+
+  function resetProgress() {
+    currentIndex = 0;
+    if (shuffled) {
+      wordsList = WORDS[currentGrade].slice();
+      shuffled = false;
+      buildWordBank();
+    }
+    renderWord();
+    updateProgress();
+    stopSpeech();
+    resetSpellInputs();
+  }
+
+  /* ---------- SPELL TAB ---------- */
+  function resetSpellInputs() {
+    feedback.textContent = '\u00A0';
+    feedback.className = 'feedback idle';
+    spellHintBox.textContent = '💡 Click "Hint" to hear the word again and get a clue';
+    spellHintBox.classList.remove('revealed');
+    buildDashInputs();
+  }
+
+  function buildDashInputs() {
+    const item = wordsList[currentIndex];
+    if (!item) return;
+    const len = item.word.length;
+    dashRow.innerHTML = '';
+    for (let i = 0; i < len; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.maxLength = 1;
+      input.className = 'dash-input';
+      input.autocomplete = 'off';
+      input.autocapitalize = 'characters';
+      input.spellcheck = false;
+      input.setAttribute('aria-label', `Letter ${i+1}`);
+      input.addEventListener('input', (e) => {
+        const v = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+        e.target.value = v;
+        e.target.classList.toggle('filled', v.length === 1);
+        if (v.length === 1) {
+          const next = dashRow.children[i + 1];
+          if (next) next.focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value) {
+          const prev = dashRow.children[i - 1];
+          if (prev) { prev.focus(); prev.value = ''; prev.classList.remove('filled'); }
+        }
+        if (e.key === 'ArrowLeft' && i > 0) dashRow.children[i-1].focus();
+        if (e.key === 'ArrowRight' && i < len - 1) dashRow.children[i+1].focus();
+        if (e.key === 'Enter') { e.preventDefault(); checkSpelling(); }
+      });
+      dashRow.appendChild(input);
+    }
+    setTimeout(() => { if (dashRow.children[0]) dashRow.children[0].focus(); }, 50);
+  }
+
+  function readSpelling() {
+    let out = '';
+    for (const inp of dashRow.children) {
+      out += (inp.value || '').toUpperCase();
+    }
+    return out;
+  }
+
+  function checkSpelling() {
+    const item = wordsList[currentIndex];
+    if (!item) return;
+    const target = item.word.toUpperCase();
+    const attempt = readSpelling();
+
+    if (attempt.length < target.length) {
+      feedback.textContent = `✏️ Fill all ${target.length} boxes!`;
+      feedback.className = 'feedback wrong';
+      speakOnce("Please fill all the letters, Othniel.", 0.7, 1.0);
+      return;
+    }
+
+    if (attempt === target) {
+      for (const inp of dashRow.children) inp.classList.add('correct');
+      feedback.textContent = '🌟 Brilliant Othniel! 🌟';
+      feedback.className = 'feedback correct';
+      speakPraise("Brilliant Othniel!");
+    } else {
+      for (const inp of dashRow.children) inp.classList.add('wrong');
+      feedback.textContent = '💪 You can do it Othniel, try again';
+      feedback.className = 'feedback wrong';
+      speakPraise("You can do it Othniel, try again.");
+      setTimeout(() => {
+        for (const inp of dashRow.children) inp.classList.remove('wrong');
+      }, 1200);
+    }
+  }
+
+  /* ---- HINT: functional ---- */
+  function showSpellHint() {
+    const item = wordsList[currentIndex];
+    if (!item) return;
+    const word = item.word.toUpperCase();
+    spellHintBox.innerHTML =
+      `💡 <strong>Meaning:</strong> ${item.hint}<br>` +
+      `🔤 <strong>Starts with:</strong> "${word[0]}" &nbsp;•&nbsp; ` +
+      `<strong>Letters:</strong> ${word.length} &nbsp;•&nbsp; ` +
+      `<strong>Ends with:</strong> "${word[word.length - 1]}"`;
+    spellHintBox.classList.add('revealed');
+    speakWordClearly();
+  }
+
+  /* ---------- Tab switching ---------- */
+  function switchTab(tab) {
+    currentTab = tab;
+    tabStudy.classList.toggle('active', tab === 'study');
+    tabSpell.classList.toggle('active', tab === 'spell');
+    studyPanel.classList.toggle('hidden', tab !== 'study');
+    spellPanel.classList.toggle('hidden', tab !== 'spell');
+    stopSpeech();
+    if (tab === 'spell') {
+      resetSpellInputs();
+      setTimeout(() => speakWordClearly(), 350);
+    }
+  }
+
+  /* ---------- Count badges ---------- */
+  function updateCountBadges() {
+    for (const g of [1,2,3]) {
+      countBadges[g].textContent = WORDS[g].length;
+    }
+  }
+
+  /* ---------- Init ---------- */
+  function init() {
+    buildStars();
+    updateCountBadges();
+    loadGrade(1);
+
+    tabStudy.addEventListener('click', () => switchTab('study'));
+    tabSpell.addEventListener('click', () => switchTab('spell'));
+
+    gradeBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const g = parseInt(e.currentTarget.dataset.grade, 10);
+        if (g === currentGrade) return;
+        loadGrade(g);
+      });
+    });
+
+    // Study tab
+    speakBtn.addEventListener('click', speakCurrentWord);
+    prevBtn.addEventListener('click', prevWord);
+    nextBtn.addEventListener('click', nextWord);
+    shuffleBtn.addEventListener('click', shuffleWords);
+    resetBtn.addEventListener('click', resetProgress);
+
+    // Spell tab
+    speakerBig.addEventListener('click', speakCurrentWord);
+    spellSpeakBtn.addEventListener('click', speakCurrentWord);
+    spellHintBtn.addEventListener('click', showSpellHint);
+    spellCheckBtn.addEventListener('click', checkSpelling);
+    spellPrevBtn.addEventListener('click', prevWord);
+    spellNextBtn.addEventListener('click', () => {
+      nextWord();
+      setTimeout(() => speakWordClearly(), 300);
+    });
+    spellResetBtn.addEventListener('click', resetProgress);
+
+    toggleWordList.addEventListener('click', toggleWordBank);
+
+    // Load voices (Chrome loads async)
+    if ('speechSynthesis' in window) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      setTimeout(loadVoices, 250);
+      setTimeout(loadVoices, 1000);
+    }
+
+    // Global keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      const tag = document.activeElement.tagName;
+      if (currentTab === 'study') {
+        if (e.code === 'Space' && !e.repeat && tag !== 'BUTTON' && tag !== 'INPUT') {
+          e.preventDefault();
+          speakCurrentWord();
+        }
+        if (e.code === 'ArrowRight') { e.preventDefault(); nextWord(); }
+        if (e.code === 'ArrowLeft')  { e.preventDefault(); prevWord(); }
+        if (e.code === 'Home')       { e.preventDefault(); resetProgress(); }
+      }
+      if (currentTab === 'spell') {
+        if (e.code === 'Space' && !e.repeat && tag !== 'INPUT') {
+          e.preventDefault();
+          speakCurrentWord();
+        }
+        if (e.code === 'ArrowLeft' && tag !== 'INPUT')  { e.preventDefault(); prevWord(); }
+        if (e.code === 'ArrowRight' && tag !== 'INPUT') { e.preventDefault(); nextWord(); }
+        if (e.code === 'Home')                          { e.preventDefault(); resetProgress(); }
+      }
+    });
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
