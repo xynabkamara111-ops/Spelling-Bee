@@ -324,7 +324,7 @@
 </div>
 <div class="app-container">
   <div class="header">
-    <h1><span>🐝</span> <span class="app-name">Otheniel</span> Spelling Bee <span>🐝</span></h1>
+    <h1><span>🐝</span> <span class="app-name">Othniel</span> Spelling Bee <span>🐝</span></h1>
   </div>
 
   <div class="tabs">
@@ -387,7 +387,7 @@
   </div>
   <div class="word-bank hidden" id="wordBank"></div>
 
-  <div class="footer-note">🐝 Otheniel Spelling Bee • Study hard, spell well!</div>
+  <div class="footer-note">🐝 Othniel Spelling Bee • Study hard, spell well!</div>
 </div>
 
 <script>
@@ -1190,13 +1190,13 @@
     if (attempt.length < target.length) {
       feedback.textContent = `✏️ Fill all ${target.length} boxes!`;
       feedback.className = 'feedback wrong';
-      speakOnce("Please fill all the letters, Otheniel.", 0.7, 1.0);
+      speakOnce("Please fill all the letters, Othniel.", 0.7, 1.0);
       return;
     }
 
     if (attempt === target) {
       for (const inp of dashRow.children) inp.classList.add('correct');
-      feedback.textContent = '🌟 Brilliant Otheniel! 🌟';
+      feedback.textContent = '🌟 Brilliant Othniel! 🌟';
       feedback.className = 'feedback correct';
       speakPraise("Brilliant Othniel!");
       launchConfetti();
