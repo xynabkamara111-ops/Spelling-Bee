@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
-  <title>🐝 Othniel Spelling Bee • Grades 1–3</title>
+  <title>🐝 Otheniel Spelling Bee • Grades 1–3</title>
   <style>
     /* =========================================================
        MATERIAL YOU (Android 17) DESIGN TOKENS
@@ -1198,13 +1198,13 @@
       for (const inp of dashRow.children) inp.classList.add('correct');
       feedback.textContent = '🌟 Brilliant Otheniel! 🌟';
       feedback.className = 'feedback correct';
-      speakPraise("Brilliant Othniel!");
+      speakPraise("Brilliant Otheniel!");
       launchConfetti();
     } else {
       for (const inp of dashRow.children) inp.classList.add('wrong');
-      feedback.textContent = '💪 You can do it Othniel, try again';
+      feedback.textContent = '💪 You can do it Otheniel, try again';
       feedback.className = 'feedback wrong';
-      speakPraise("You can do it Othniel, try again.");
+      speakPraise("You can do it Otheniel, try again.");
       setTimeout(() => {
         for (const inp of dashRow.children) inp.classList.remove('wrong');
       }, 1200);
@@ -1358,3 +1358,482 @@
 </script>
 </body>
 </html>
+
+
+On Fri, Sep 25, 2026 at 11:45 AM Randwulf A J Tucker <randwulftucker@gmail.com> wrote:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>🐝 Otheniel Spelling Bee • Grades 1–3</title>
+  <style>
+    /* =========================================================
+       MATERIAL YOU (Android 17) DESIGN TOKENS
+       ========================================================= */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root {
+      --primary:#800020;
+      --on-primary:#FFFFFF;
+      --primary-container:#F6E8EC;
+      --on-primary-container:#4A0011;
+      --secondary-container:#EFE3E7;
+      --on-secondary-container:#3E2028;
+      --tertiary-container:#FAF0F3;
+      --on-tertiary-container:#5A2533;
+      --surface:#FFFFFF;
+      --surface-container-low:#FCF7F9;
+      --surface-container:#F7EEF1;
+      --surface-container-high:#F2E6EA;
+      --on-surface:#2A1A20;
+      --on-surface-variant:#5C4A50;
+      --outline:#9E858D;
+      --outline-variant:#DECED3;
+      --error:#B3261E;
+      --error-container:#F9DEDC;
+      --on-error-container:#410E0B;
+      --success:#146C2E;
+      --success-container:#C4EED0;
+      --radius-xl:28px;
+      --radius-lg:20px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --elevation1:0 1px 2px rgba(0,0,0,.30),0 1px 3px 1px rgba(0,0,0,.15);
+      --elevation2:0 1px 2px rgba(0,0,0,.30),0 2px 6px 2px rgba(0,0,0,.15);
+      --elevation3:0 1px 3px rgba(0,0,0,.30),0 4px 8px 3px rgba(0,0,0,.15);
+    }
+    body {
+      font-family:'Google Sans','Roboto','Segoe UI',system-ui,-apple-system,sans-serif;
+      background:linear-gradient(180deg,#FFFFFF 0%,#F7EEF1 100%);
+      min-height:100vh;
+      color:var(--on-surface);
+      -webkit-tap-highlight-color:transparent;
+    }
+    .app-container { max-width:920px; width:100%; margin:0 auto; padding:1rem 1rem 2rem; }
+
+    /* ---------- Top app bar ---------- */
+    .header { display:flex; align-items:center; justify-content:center; padding:.8rem 0 1.2rem; }
+    .header h1 { font-size:1.7rem; font-weight:700; letter-spacing:-0.5px; color:var(--on-surface); display:flex; align-items:center; gap:10px; }
+    .header h1 span { font-size:1.7rem; line-height:1; }
+    .header .app-name { color:var(--primary); font-weight:800; }
+
+    /* ---------- Segmented tabs (M3) ---------- */
+    .tabs { display:flex; justify-content:center; margin-bottom:1.4rem; }
+    .tabs > * { position:relative; }
+    .tab-btn {
+      position:relative; overflow:hidden;
+      background:transparent; border:none;
+      color:var(--on-surface-variant);
+      font-size:1rem; font-weight:600; letter-spacing:.1px;
+      padding:.75rem 2rem; cursor:pointer;
+      transition:all .18s ease;
+    }
+    .tab-btn:first-child { border-radius:24px 4px 4px 24px; }
+    .tab-btn:last-child  { border-radius:4px 24px 24px 4px; }
+    .tab-btn.active { background:var(--primary-container); color:var(--on-primary-container); box-shadow:var(--elevation1); }
+    .tab-btn:first-child.active { border-radius:24px 4px 4px 24px; }
+    .tab-btn:last-child.active  { border-radius:4px 24px 24px 4px; }
+    /* wrap so the active segment sits on a track */
+    .tabs { background:var(--surface-container-high); border-radius:28px; padding:4px; width:max-content; margin-left:auto; margin-right:auto; }
+
+    /* ---------- Grade filter chips (buttons) ---------- */
+    .grade-badge { display:flex; justify-content:center; gap:10px; margin-bottom:1.4rem; flex-wrap:wrap; }
+    .grade-btn {
+      position:relative; overflow:hidden;
+      background:transparent;
+      border:1.5px solid var(--outline);
+      color:var(--primary);
+      font-size:1rem; font-weight:600;
+      padding:.55rem 1.2rem; border-radius:var(--radius-lg);
+      cursor:pointer; transition:all .15s ease;
+      display:inline-flex; align-items:center; gap:6px;
+      font-family:inherit;
+    }
+    .grade-btn.active { background:var(--primary-container); border-color:transparent; color:var(--on-primary-container); box-shadow:var(--elevation1); }
+    .count-badge { font-size:.78rem; font-weight:700; background:var(--primary); color:#fff; padding:2px 8px; border-radius:8px; }
+    .grade-btn.active .count-badge { background:var(--on-primary-container); color:var(--primary-container); }
+
+    /* ---------- Cards ---------- */
+    .card-area {
+      background:var(--surface-container-low);
+      border-radius:var(--radius-xl);
+      padding:2rem 1.8rem 1.6rem;
+      box-shadow:var(--elevation1);
+      margin-bottom:1.2rem;
+      border:1px solid var(--outline-variant);
+    }
+
+    /* ---------- Word display ---------- */
+    .word-display { text-align:center; margin-bottom:2rem; }
+    .word {
+      font-size:4.2rem; font-weight:700; color:var(--on-surface);
+      text-transform:uppercase; letter-spacing:6px; word-break:break-word; line-height:1.15;
+      margin-bottom:1rem;
+    }
+    .hint {
+      font-size:1.15rem; color:var(--on-surface-variant);
+      background:var(--surface-container-high);
+      display:inline-block; padding:.55rem 1.4rem; border-radius:10px;
+      font-weight:500;
+    }
+
+    /* ---------- Speaker FAB ---------- */
+    .speaker-big {
+      width:88px; height:88px; border-radius:50%;
+      background:var(--primary-container); color:var(--on-primary-container);
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:2.4rem; cursor:pointer; user-select:none;
+      box-shadow:var(--elevation2);
+      transition:box-shadow .15s ease, transform .12s ease;
+      position:relative; overflow:hidden;
+      margin:.5rem 0 1rem;
+    }
+    .speaker-big:hover { box-shadow:var(--elevation3); transform:scale(1.04); }
+    .speaker-big:active { transform:scale(.96); }
+    .speaker-big.speaking { animation:pulse 1.2s infinite; background:var(--primary); color:#fff; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
+    /* ---------- Spell inputs (M3 outlined text fields) ---------- */
+    .spell-area { text-align:center; }
+    .spell-instruction { font-size:1.15rem; color:var(--on-surface-variant); margin-bottom:1rem; font-weight:500; }
+    .dash-row { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin:1.4rem 0; }
+    .dash-input {
+      width:52px; height:64px; font-size:1.9rem; font-weight:600; text-align:center;
+      text-transform:uppercase; color:var(--on-surface); background:var(--surface);
+      border:1.5px solid var(--outline); border-radius:var(--radius-md); outline:none;
+      transition:border-color .15s, box-shadow .15s;
+      caret-color:var(--primary);
+      font-family:inherit;
+    }
+    .dash-input:focus { border:2px solid var(--primary); }
+    .dash-input.filled { border-color:var(--primary); background:var(--surface-container-low); }
+    .dash-input.correct { border:2px solid var(--success); background:var(--success-container); color:var(--success); }
+    .dash-input.wrong   { border:2px solid var(--error); background:var(--error-container); color:var(--error); animation:shake .3s; }
+    @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+
+    /* ---------- Feedback ---------- */
+    .feedback { font-size:1.5rem; font-weight:700; margin-top:1.2rem; min-height:2.2rem; letter-spacing:.1px; }
+    .feedback.correct { color:var(--success); }
+    .feedback.wrong { color:var(--error); }
+    .feedback.idle { color:var(--on-surface-variant); }
+
+    /* ---------- Hint chip ---------- */
+    .spell-hint-box {
+      display:inline-block; background:var(--surface-container-high);
+      padding:.8rem 1.4rem; border-radius:var(--radius-lg);
+      font-size:1rem; color:var(--on-surface-variant);
+      margin-top:.6rem; max-width:92%; line-height:1.6;
+      border:1px solid var(--outline-variant);
+    }
+    .spell-hint-box.revealed { background:var(--secondary-container); color:var(--on-secondary-container); border-color:transparent; }
+
+    /* ---------- M3 Buttons ---------- */
+    .actions, .spell-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:.7rem; margin:1.4rem 0 .6rem; }
+    .btn {
+      position:relative; overflow:hidden;
+      border:none; border-radius:var(--radius-lg);
+      height:48px; padding:0 22px;
+      font-size:.98rem; font-weight:600; letter-spacing:.1px;
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      cursor:pointer; transition:box-shadow .15s ease, filter .15s ease;
+      min-width:104px; font-family:inherit;
+    }
+    .btn:hover { box-shadow:var(--elevation1); }
+    .btn:active { filter:brightness(.92); }
+    .btn:disabled { opacity:.45; pointer-events:none; }
+
+    /* Filled button (primary) — speak & check */
+    .btn.speak { background:var(--primary); color:var(--on-primary); }
+    .btn.check { background:var(--primary); color:var(--on-primary); min-width:140px; }
+    /* Filled tonal — prev / next */
+    .btn.prev { background:var(--secondary-container); color:var(--on-secondary-container); }
+    .btn.next { background:var(--primary-container); color:var(--on-primary-container); }
+    /* Tertiary tonal — shuffle & hint */
+    .btn.shuffle { background:var(--tertiary-container); color:var(--on-tertiary-container); }
+    .btn.hint  { background:var(--secondary-container); color:var(--on-secondary-container); }
+    /* Error tonal — reset */
+    .btn.reset { background:var(--error-container); color:var(--on-error-container); }
+
+    /* ---------- M3 Linear progress indicator ---------- */
+    .progress-area {
+      display:flex; align-items:center; gap:16px;
+      background:var(--surface-container-low);
+      border-radius:24px; padding:1rem 1.4rem;
+      box-shadow:var(--elevation1);
+      border:1px solid var(--outline-variant);
+      flex-wrap:wrap;
+    }
+    .progress-text { font-size:1rem; font-weight:600; color:var(--on-surface); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+    .progress-bar-bg { flex:1; min-width:160px; height:8px; background:var(--surface-container-high); border-radius:4px; overflow:hidden; }
+    .progress-fill { width:0%; height:100%; background:var(--primary); border-radius:4px; transition:width .3s ease; }
+    .stars { display:flex; gap:4px; font-size:1.5rem; line-height:1; }
+    .star { color:var(--outline-variant); transition:all .2s; }
+    .star.filled { color:var(--primary); }
+
+    /* ---------- Word bank ---------- */
+    .word-list-toggle { text-align:right; margin-top:.8rem; font-size:.95rem; color:var(--primary); cursor:pointer; font-weight:600; display:inline-block; }
+    .word-bank {
+      margin-top:.8rem; background:var(--surface-container-low);
+      border-radius:var(--radius-lg); padding:1rem 1.2rem;
+      font-size:.95rem; color:var(--on-surface);
+      display:flex; flex-wrap:wrap; gap:8px;
+      border:1px solid var(--outline-variant);
+      max-height:160px; overflow-y:auto;
+    }
+    .word-bank span { background:var(--surface-container-high); padding:.3rem .85rem; border-radius:8px; font-weight:500; }
+
+    .hidden { display:none !important; }
+    .footer-note { text-align:center; margin-top:1.4rem; font-size:.85rem; color:var(--on-surface-variant); }
+
+    /* ---------- Tap ripple (Material) ---------- */
+    .ripple {
+      position:absolute; border-radius:50%;
+      background:rgba(128,0,32,.22);
+      transform:scale(0);
+      animation:ripple .55s ease-out forwards;
+      pointer-events:none;
+    }
+    .btn .ripple { background:rgba(128,0,32,.22); }
+    .btn.speak .ripple, .btn.check .ripple, .grade-btn.active .ripple { background:rgba(255,255,255,.35); }
+    @keyframes ripple { to { transform:scale(1); opacity:0; } }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width:700px) {
+      .header h1 { font-size:1.35rem; }
+      .word { font-size:2.8rem; letter-spacing:4px; }
+      .card-area { padding:1.4rem 1rem 1.2rem; border-radius:22px; }
+      .btn { height:44px; padding:0 16px; font-size:.9rem; min-width:92px; }
+      .speaker-big { width:72px; height:72px; font-size:2rem; }
+      .hint { font-size:1rem; }
+      .tab-btn { padding:.65rem 1.3rem; font-size:.95rem; }
+      .progress-text { font-size:.95rem; }
+      .feedback { font-size:1.3rem; }
+    }
+    @media (max-width:480px) {
+      .word { font-size:2rem; letter-spacing:3px; }
+      .grade-btn { font-size:.88rem; padding:.45rem .9rem; }
+      .btn { font-size:.85rem; padding:0 12px; min-width:84px; gap:4px; }
+      .speaker-big { width:60px; height:60px; font-size:1.6rem; }
+      .dash-input { width:40px; height:52px; font-size:1.5rem; border-radius:12px; }
+      .dash-row { gap:5px; }
+      .feedback { font-size:1.15rem; }
+      .spell-instruction { font-size:1rem; }
+      .hint { font-size:.9rem; }
+    }
+
+    /* =========================================================
+       KID-FRIENDLY PLAYFUL LAYER (on top of Material You)
+       ========================================================= */
+    .app-container { position:relative; z-index:1; }
+    /* Floating background emojis */
+    .bg-decor { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .bg-decor span { position:absolute; opacity:.30; animation:floaty 7s ease-in-out infinite; filter:saturate(1.2); }
+    @keyframes floaty { 0%,100%{transform:translateY(0) rotate(-8deg);} 50%{transform:translateY(-26px) rotate(10deg);} }
+
+    /* Playful display font + rainbow gradient word */
+    .word {
+      font-family:'Baloo 2','Fredoka','Google Sans','Roboto',sans-serif;
+      font-weight:800;
+      background:linear-gradient(92deg,#800020 0%,#9A2A45 35%,#B44662 70%,#D86B84 100%);
+      -webkit-background-clip:text; background-clip:text;
+      -webkit-text-fill-color:transparent; color:transparent;
+      letter-spacing:5px;
+    }
+    .hint { font-family:'Fredoka','Baloo 2',sans-serif; font-weight:600; }
+    .header h1 { font-family:'Baloo 2','Fredoka',sans-serif; }
+    .header h1 span { display:inline-block; animation:beeBounce 2.4s ease-in-out infinite; }
+    .header h1 span:last-child { animation-delay:1.2s; }
+    @keyframes beeBounce { 0%,100%{transform:translateY(0) rotate(0deg);} 30%{transform:translateY(-10px) rotate(-12deg);} 60%{transform:translateY(0) rotate(8deg);} }
+
+    /* Word pops in when it changes */
+    @keyframes wordPop { 0%{transform:scale(.5);opacity:0;} 55%{transform:scale(1.15);opacity:1;} 100%{transform:scale(1);opacity:1;} }
+    .word.pop { animation:wordPop .45s cubic-bezier(.34,1.56,.64,1); }
+
+    /* Golden wiggling stars */
+    .star.filled { color:#F9A825; text-shadow:0 0 12px rgba(249,168,37,.55); animation:starWiggle .55s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes starWiggle { 0%{transform:scale(.3) rotate(-40deg);} 60%{transform:scale(1.45) rotate(12deg);} 100%{transform:scale(1) rotate(0);} }
+
+    /* Shimmering progress fill */
+    .progress-fill { background:linear-gradient(90deg,#800020,#96243D,#B03F5A,#C55A73,#D86B84,#C55A73,#B03F5A,#96243D,#800020); background-size:200% 100%; animation:shimmer 4s linear infinite; }
+    @keyframes shimmer { to { background-position:200% 0; } }
+
+    /* Confetti celebration */
+    .confetti { position:fixed; top:-40px; z-index:999; pointer-events:none; animation:confettiFall linear forwards; }
+    @keyframes confettiFall { to { transform:translateY(112vh) rotate(720deg); } }
+
+    /* Bouncy buttons */
+    .btn { border-radius:24px; }
+    .btn:hover { transform:translateY(-2px); }
+    .btn:active { transform:translateY(1px) scale(.97); }
+    .grade-btn { border-radius:24px; transition:all .15s ease, transform .12s ease; }
+    .grade-btn:hover { transform:translateY(-2px); }
+    .grade-btn:active { transform:scale(.95); }
+  </style>
+<base target="_blank">
+</head>
+<body>
+<div class="bg-decor" aria-hidden="true">
+  <span style="top:6%;left:4%;animation-delay:0s;font-size:2.4rem">🎈</span>
+  <span style="top:14%;right:6%;animation-delay:1.2s;font-size:2rem">⭐</span>
+  <span style="top:44%;left:2%;animation-delay:2.1s;font-size:1.8rem">🌈</span>
+  <span style="top:58%;right:3%;animation-delay:.6s;font-size:2.2rem">✏️</span>
+  <span style="bottom:12%;left:7%;animation-delay:1.7s;font-size:2rem">📚</span>
+  <span style="bottom:8%;right:9%;animation-delay:2.8s;font-size:2.4rem">🐝</span>
+  <span style="top:78%;left:45%;animation-delay:3.4s;font-size:1.7rem">💜</span>
+  <span style="top:30%;left:48%;animation-delay:4s;font-size:1.6rem">🎵</span>
+</div>
+<div class="app-container">
+  <div class="header">
+    <h1><span>🐝</span> <span class="app-name">Otheniel</span> Spelling Bee <span>🐝</span></h1>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tabStudy" data-tab="study">📖 Study</button>
+    <button class="tab-btn" id="tabSpell" data-tab="spell">✍️ Spell</button>
+  </div>
+
+  <div class="grade-badge">
+    <button class="grade-btn active" data-grade="1">Grade 1 <span class="count-badge" id="count1">0</span></button>
+    <button class="grade-btn" data-grade="2">Grade 2 <span class="count-badge" id="count2">0</span></button>
+    <button class="grade-btn" data-grade="3">Grade 3 <span class="count-badge" id="count3">0</span></button>
+  </div>
+
+  <!-- STUDY TAB -->
+  <div id="studyPanel">
+    <div class="card-area">
+      <div class="word-display">
+        <div class="word" id="wordDisplay">PAT</div>
+        <div class="hint" id="hintDisplay">tap lightly</div>
+      </div>
+      <div class="actions">
+        <button class="btn speak" id="speakBtn">🔊 Speak</button>
+        <button class="btn prev" id="prevBtn">⬅️ Previous</button>
+        <button class="btn next" id="nextBtn">➡️ Next</button>
+        <button class="btn shuffle" id="shuffleBtn">🔀 Shuffle</button>
+        <button class="btn reset" id="resetBtn">🔄 Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPELL TAB -->
+  <div id="spellPanel" class="hidden">
+    <div class="card-area">
+      <div class="spell-area">
+        <div class="spell-instruction">🔊 Listen carefully, then spell the word:</div>
+        <div class="speaker-big" id="speakerBig" title="Click to hear the word again">🔊</div>
+        <div class="dash-row" id="dashRow"></div>
+        <div class="spell-hint-box" id="spellHintBox">💡 Click "Hint" to hear the word again and get a clue</div>
+        <div class="feedback idle" id="feedback">&nbsp;</div>
+        <div class="spell-actions">
+          <button class="btn speak" id="spellSpeakBtn">🔊 Hear Again</button>
+          <button class="btn hint"  id="spellHintBtn">💡 Hint</button>
+          <button class="btn check" id="spellCheckBtn">✅ Check</button>
+          <button class="btn prev"  id="spellPrevBtn">⬅️ Previous</button>
+          <button class="btn next"  id="spellNextBtn">➡️ Next Word</button>
+          <button class="btn reset" id="spellResetBtn">🔄 Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-area">
+    <div class="progress-text"><span>📚</span> <span id="progressLabel">1 / 145</span></div>
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill" style="width:1%"></div></div>
+    <div class="stars" id="starsContainer"></div>
+  </div>
+
+  <div style="text-align:right; margin-top:.4rem;">
+    <span class="word-list-toggle" id="toggleWordList">📋 show word bank</span>
+  </div>
+  <div class="word-bank hidden" id="wordBank"></div>
+
+  <div class="footer-note">🐝 Otheniel Spelling Bee • Study hard, spell well!</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     ICBAI-SL SPELLING BEE WORD LISTS
+     ========================================================= */
+  const WORDS = {
+    1: [
+      { word:"PAT", hint:"tap lightly with your hand" },
+      { word:"BID", hint:"offer a price" },
+      { word:"LEG", hint:"🦵 you stand on it" },
+      { word:"CAP", hint:"🧢 a soft hat" },
+      { word:"HID", hint:"went out of sight" },
+      { word:"TEN", hint:"🔟 number after nine" },
+      { word:"RAN", hint:"moved fast on foot" },
+      { word:"JOB", hint:"💼 work you do" },
+      { word:"HOP", hint:"🐰 jump on one foot" },
+      { word:"MAT", hint:"a small rug" },
+      { word:"FUN", hint:"🎉 enjoy yourself" },
+      { word:"BAT", hint:"🦇 flies at night / stick for baseball" },
+      { word:"DEN", hint:"a cozy room or animal home" },
+      { word:"WIG", hint:"fake hair you wear" },
+      { word:"VAN", hint:"🚐 a big boxy vehicle" },
+      { word:"CUP", hint:"🥤 you drink from it" },
+      { word:"CUB", hint:"🐻 baby bear" },
+      { word:"MOM", hint:"👩 your mother" },
+      { word:"YAM", hint:"🍠 a sweet potato" },
+      { word:"BUS", hint:"🚌 carries many riders" },
+      { word:"FOX", hint:"🦊 clever red animal" },
+      { word:"HIS", hint:"belongs to him" },
+      { word:"LET", hint:"allow something" },
+      { word:"PUP", hint:"🐶 baby dog" },
+      { word:"CAN", hint:"🥫 a metal container" },
+      { word:"WET", hint:"💧 covered in water" },
+      { word:"BIT", hint:"a tiny piece" },
+      { word:"BOX", hint:"📦 a square container" },
+      { word:"DAD", hint:"👨 your father" },
+      { word:"DID", hint:"past of 'do'" },
+      { word:"BAKE", hint:"🍪 cook in an oven" },
+      { word:"CHOP", hint:"cut into pieces" },
+      { word:"EAST", hint:"🌅 where the sun rises" },
+      { word:"DIME", hint:"🪙 a ten-cent coin" },
+      { word:"HELP", hint:"🤝 give a hand" },
+      { word:"LUCK", hint:"🍀 good fortune" },
+      { word:"CLAW", hint:"🐾 sharp animal nail" },
+      { word:"BELT", hint:"worn around your waist" },
+      { word:"GAVE", hint:"handed over" },
+      { word:"FAST", hint:"💨 moving quickly" },
+      { word:"ONCE", hint:"one time only" },
+      { word:"MOON", hint:"🌙 shines at night" },
+      { word:"SHOW", hint:"let someone see" },
+      { word:"NECK", hint:"between head and shoulders" },
+      { word:"LOVE", hint:"❤️ deep affection" },
+      { word:"MILK", hint:"🥛 white drink from cows" },
+      { word:"SAME", hint:"not different" },
+      { word:"SICK", hint:"🤒 not feeling well" },
+      { word:"KING", hint:"👑 a royal ruler" },
+      { word:"PART", hint:"a piece of something" },
+      { word:"ROOM", hint:"a space inside a house" },
+      { word:"TANK", hint:"holds water or fuel" },
+      { word:"SNOW", hint:"❄️ frozen white flakes" },
+      { word:"SEED", hint:"🌱 grows into a plant" },
+      { word:"SIDE", hint:"left or right edge" },
+      { word:"MICE", hint:"🐭 plural of mouse" },
+      { word:"ZONE", hint:"a special area" },
+      { word:"COOK", hint:"👨‍🍳 make food" },
+      { word:"MULE", hint:"a donkey-horse mix" },
+      { word:"WERE", hint:"past of 'are'" },
+      { word:"GOLF", hint:"⛳ sport with clubs and a ball" },
+      { word:"STAR", hint:"⭐ shines at night" },
+      { word:"NOON", hint:"🕛 middle of the day" },
+      { word:"SLOW", hint:"🐢 not fast" },
+      { word:"HOPE", hint:"wish for something good" },
+      { word:"ACROSS", hint:"from one side to the other" },
+      { word:"BROTHER", hint:"👦 a boy sibling" },
+      { word:"CENTER", hint:"the middle" },
+      { word:"BEFORE", hint:"earlier in time" },
+      { word:"COOKIE", hint:"🍪 a sweet baked treat" },
+      { word:"AROUND", hint:"on all sides" },
+      { word:"BUTTER", hint:"🧈 spread for bread" },
+      { word:"MYSELF", hint:"my own self" },
+      { word:"EVERY", hint:"each one" },
+   
